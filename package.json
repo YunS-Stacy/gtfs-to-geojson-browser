@@ -2,17 +2,18 @@
   "name": "gtfs-to-geojson-browser",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
-    "build": "tsc"
+    "build": "parcel build index.html"
   },
   "dependencies": {
+    "esri-loader": "2.9.2",
     "jszip": "3.2.1",
     "papaparse": "5.0.0"
   },
   "devDependencies": {
-    "@types/geojson": "^7946.0.7",
+    "@types/arcgis-js-api": "4.11.0",
     "@types/jszip": "3.1.6",
     "@types/papaparse": "4.5.11",
     "babel-core": "^6.26.3",
@@ -21,8 +22,5 @@
     "parcel-bundler": "^1.6.1",
     "typescript": "^3.5.2"
   },
-  "keywords": [],
-  "browserslist": [
-    "last 1 Chrome versions"
-  ]
+  "keywords": []
 }
