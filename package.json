@@ -1,0 +1,28 @@
+{
+  "name": "gtfs-to-geojson-browser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "jszip": "3.2.1",
+    "papaparse": "5.0.0"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.7",
+    "@types/jszip": "3.1.6",
+    "@types/papaparse": "4.5.11",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-runtime": "^6.26.0",
+    "parcel-bundler": "^1.6.1",
+    "typescript": "^3.5.2"
+  },
+  "keywords": [],
+  "browserslist": [
+    "last 1 Chrome versions"
+  ]
+}
