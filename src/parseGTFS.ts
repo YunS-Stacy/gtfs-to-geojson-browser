@@ -1,39 +1,24 @@
-import { IGtfsRoute } from '.';
-import { loadGraphicsLayerModule } from './utils/loadCommonModules';
-
-
-export default async (view: __esri.SceneView) => {
-  // // Load sample data
-  const res = await fetch('gtfs/gtfs_honolulu.zip');
-  const blob = await res.blob();
-
+export default async (file?: File) => {
+  console.time('parse')
+  let blob: Blob;
+  if (file) {
+    blob = file;
+  } else {
+    // Load sample data
+    const res = await fetch('gtfs/gtfs_honolulu.zip');
+    blob = await res.blob();
+  }
   // Use worker, not to block UI
-  const worker = new Worker('./workers/RouteWorker.js');
+  const worker = new Worker('./workers/parse.worker.ts');
 
   worker.postMessage(blob);
   worker.onmessage = async e => {
-    const GraphicsLayer = await loadGraphicsLayerModule();
     const graphics = Array.from(e.data[0]).concat(Array.from(e.data[1]))
-    const layer = new GraphicsLayer({
-      graphics
-    })
-    view.map.add(layer);
-    await view.whenLayerView(layer);
-    view.goTo(layer.graphics)
-  }
-};
-
-const getPolylines = (datum: { [key: string]: IGtfsRoute[] }) => {
-  const polylines = Object.values(datum).map((arr) => {
-    const paths = [arr.map(el => [el.shape_pt_lon, el.shape_pt_lat])];
-    const line = {
-      paths,
-      type: 'polyline',
-      spatialReference: { wkid: 4326 },
+    console.log(graphics.length, 'graphics');
+    console.timeEnd('parse')
+    return {
+      routes: Array.from(e.data[0]),
+      shapes: Array.from(e.data[1]),
     };
-
-    return line;
-  });
-
-  return polylines;
+  }
 };
