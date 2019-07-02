@@ -1,19 +1,23 @@
 {
   "name": "gtfs-to-geojson-browser",
+  "description": "Generate geojson of transit route data from a GTFS file in browser",
+  "keywords": [
+    "gtfs",
+    "geojson"
+  ],
   "version": "1.0.0",
-  "description": "",
+  "author": "Yun Shi <shiyun_stacy@yahoo.com>",
+  "license": "MIT",
   "main": "index.html",
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "esri-loader": "2.9.2",
     "jszip": "3.2.1",
     "papaparse": "5.0.0"
   },
   "devDependencies": {
-    "@types/arcgis-js-api": "4.11.0",
     "@types/jszip": "3.1.6",
     "@types/papaparse": "4.5.11",
     "babel-core": "^6.26.3",
