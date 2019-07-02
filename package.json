@@ -8,16 +8,23 @@
   "version": "1.0.0",
   "author": "Yun Shi <shiyun_stacy@yahoo.com>",
   "license": "MIT",
-  "main": "index.html",
+  "main": "lib/index",
   "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "build": "tsc"
   },
   "dependencies": {
     "jszip": "3.2.1",
     "papaparse": "5.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YunS-Stacy/gtfs-to-geojson-browser"
+  },
+  "bugs": {
+    "url": "https://github.com/YunS-Stacy/gtfs-to-geojson-browser/issues"
+  },
   "devDependencies": {
+    "@types/geojson": "^7946.0.7",
     "@types/jszip": "3.1.6",
     "@types/papaparse": "4.5.11",
     "babel-core": "^6.26.3",
@@ -26,5 +33,5 @@
     "parcel-bundler": "^1.6.1",
     "typescript": "^3.5.2"
   },
-  "keywords": []
+  "files": ["lib"]
 }

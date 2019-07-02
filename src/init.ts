@@ -1,6 +1,7 @@
+'use strict';
 import parseGTFS from './parseGTFS';
 
-export default async () => {
+(async () => {
   // Set up input el
   const appEl = document.getElementById('app');
   
@@ -11,25 +12,8 @@ export default async () => {
   inputEl.addEventListener('change', (ev) => {
     const files = inputEl.files;
     const file = files[0];
-
     parseGTFS(file);
-    // const fileReader = new FileReader();
-
-    // fileReader.addEventListener(
-    //   'load',
-    //   e => {
-    //     console.log(fileReader.result);
-    //   },
-    //   false,
-    // );
-
-    // fileReader.readAsText(file);
   });
 
-  // Set up 'test' button
-  const buttonEl = document.createElement('button');
-  buttonEl.innerHTML = 'Run test';
-  buttonEl.addEventListener('click', () => parseGTFS());
   appEl.appendChild(inputEl);
-  appEl.appendChild(buttonEl);
-};
+})();

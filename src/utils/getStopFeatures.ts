@@ -1,5 +1,5 @@
-import { IGtfsStop } from '..';
 import { Feature } from 'geojson';
+import { IGtfsStop } from '../parseGTFS';
 
 export default (datum: IGtfsStop[]) => {
   const res: Set<Feature> = new Set();

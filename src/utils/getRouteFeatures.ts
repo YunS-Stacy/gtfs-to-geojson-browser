@@ -1,5 +1,5 @@
-import { IGtfsRoute } from '..';
 import { LineString, Feature } from 'geojson';
+import { IGtfsRoute } from '../parseGTFS';
 
 export default (datum: IGtfsRoute[]) => {
   console.time('shape');
