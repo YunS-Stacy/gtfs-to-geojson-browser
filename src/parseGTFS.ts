@@ -1,4 +1,5 @@
-import Parser from './workers/parse.worker';
+import { Feature } from 'geojson';
+import Parser from './parser.worker';
 
 export interface IGtfsRoute {
   route_id: string;
@@ -33,13 +34,17 @@ export interface IGtfsTrip {
   bikes_allowed: 0 | 1 | 2 | undefined;
 }
 
-export default async (file: File | Blob) => {
+export default async (file: File | Blob): Promise<{
+  routes: Feature[];
+  shapes: Feature[];
+}> => {
   console.time('parse')
   if (!file) {
+    console.timeEnd('parse')
     return null;
   }
   // Use worker, not to block UI
-  const worker = new (Parser as any)();
+  const worker: Worker = new (Parser as any)();
 
   worker.postMessage(file);
   worker.onmessage = async e => {

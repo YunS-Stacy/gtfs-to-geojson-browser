@@ -3,15 +3,16 @@
     "module": "commonjs",
     "jsx": "preserve",
     "esModuleInterop": true,
-    "sourceMap": false,
-    "allowJs": true,
+    "declaration": true,
     "lib": [
       "es6",
       "dom",
+      "webworker"
     ],
     "outDir": "./lib",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noImplicitAny": true
   },
   "exclude": ["node_modules", "dist", "lib"],
-  "include": ["src"]
+  "include": ["src", "webpack.config.js"]
 }

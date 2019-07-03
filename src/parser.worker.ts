@@ -1,7 +1,7 @@
 import Zip from 'jszip';
-import getRouteFeatures from '../utils/getRouteFeatures';
-import parseTxt from '../utils/parseTxt';
-import getStopFeatures from '../utils/getStopFeatures';
+import getRouteFeatures from './utils/getRouteFeatures';
+import parseTxt from './utils/parseTxt';
+import getStopFeatures from './utils/getStopFeatures';
 
 const ctx: Worker = self as any;
 ctx.onmessage = async (e) => {
@@ -41,4 +41,5 @@ ctx.onmessage = async (e) => {
   ctx.postMessage(datum);
 };
 
-export default ctx;
+// Trickery to fix TypeScript since this will be done by "worker-loader"
+export default {} as typeof Worker & (new () => Worker);
