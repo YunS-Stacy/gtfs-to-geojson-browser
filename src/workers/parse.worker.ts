@@ -40,3 +40,5 @@ ctx.onmessage = async (e) => {
   );
   ctx.postMessage(datum);
 };
+
+export default ctx;

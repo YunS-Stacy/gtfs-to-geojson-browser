@@ -1,3 +1,4 @@
+import Parser from './workers/parse.worker';
 
 export interface IGtfsRoute {
   route_id: string;
@@ -38,7 +39,7 @@ export default async (file: File | Blob) => {
     return null;
   }
   // Use worker, not to block UI
-  const worker = new Worker('./workers/parse.worker.ts');
+  const worker = new (Parser as any)();
 
   worker.postMessage(file);
   worker.onmessage = async e => {
