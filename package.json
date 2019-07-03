@@ -8,7 +8,7 @@
   "version": "2.0.0",
   "author": "Yun Shi <shiyun_stacy@yahoo.com>",
   "license": "MIT",
-  "main": "lib/index",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc"
   },
