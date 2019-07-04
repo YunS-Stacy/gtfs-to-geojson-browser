@@ -1,4 +1,5 @@
-import { FeatureCollection } from 'geojson';
+import getShapeFeatures from './utils/getShapeFeatures';
+import getStopFeatures from './utils/getStopFeatures';
 export interface IGtfsStop {
     stop_id: string;
     stop_code?: string;
@@ -56,7 +57,10 @@ export interface IGtfsZipFile {
     shapes: IGtfsShape[];
 }
 interface IGtfsResponse {
-    [key: string]: FeatureCollection;
+    shapes?: ReturnType<typeof getShapeFeatures>;
+    stops?: ReturnType<typeof getStopFeatures>;
+    routes?: IGtfsRoute[];
+    trips?: IGtfsTripExtended[];
 }
 declare const parseGTFS: (file: File | Blob, fileOptions?: ("stops" | "routes" | "trips" | "shapes")[]) => Promise<IGtfsResponse>;
 export declare type PARSE_GTFS = typeof parseGTFS;
