@@ -1,6 +1,7 @@
-import { Feature, FeatureCollection } from 'geojson';
 import Parser from './parser.worker';
 import getFeatureCollectionFromFeatures from './utils/getFeatureCollectionFromFeatures';
+import getShapeFeatures from './utils/getShapeFeatures';
+import getStopFeatures from './utils/getStopFeatures';
 
 export interface IGtfsStop {
   stop_id: string;
@@ -65,7 +66,10 @@ export interface IGtfsZipFile {
 }
 
 interface IGtfsResponse {
-  [key: string]: FeatureCollection;
+  shapes?: ReturnType<typeof getShapeFeatures>;
+  stops?: ReturnType<typeof getStopFeatures>;
+  routes?: IGtfsRoute[];
+  trips?: IGtfsTripExtended[];
 }
 
 const parseGTFS = async (
@@ -84,24 +88,20 @@ const parseGTFS = async (
     fileOptions,
     blob: file,
   });
-  worker.onmessage = async (e: {
-    data: { [k in keyof IGtfsResponse]: Set<Feature> }[];
-  }) => {
+  worker.onmessage = async (e: { data: IGtfsResponse[] }) => {
     // parsepapa will also publish message event
     if (Array.isArray(e.data) && e.data.length > 0) {
-      const [parsed]: { [k in keyof IGtfsResponse]: Set<Feature> }[] = e.data;
+      const [parsed] = e.data;
 
       const res: IGtfsResponse = Object.keys(parsed).reduce(
-        (accum: IGtfsResponse, key) => ({
+        (accum: IGtfsResponse, key: keyof IGtfsResponse) => ({
           ...accum,
           [key]: /shape|stop/i.test(key)
-            ? getFeatureCollectionFromFeatures(Array.from(parsed[key]))
+            ? getFeatureCollectionFromFeatures(parsed[key as 'shapes' | 'stops'])
             : parsed[key],
         }),
         {},
       );
-      console.log(res, 'res');
-
       console.timeEnd('parse');
       return res;
     }
