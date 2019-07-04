@@ -1,5 +1,3 @@
-import getShapeFeatures from './utils/getShapeFeatures';
-import getStopFeatures from './utils/getStopFeatures';
 export interface IGtfsStop {
     stop_id: string;
     stop_code?: string;
@@ -56,12 +54,16 @@ export interface IGtfsZipFile {
     trips: IGtfsTrip[];
     shapes: IGtfsShape[];
 }
-interface IGtfsResponse {
-    shapes?: ReturnType<typeof getShapeFeatures>;
-    stops?: ReturnType<typeof getStopFeatures>;
-    routes?: IGtfsRoute[];
-    trips?: IGtfsTripExtended[];
+export interface IParameters {
+    blob: Blob;
+    fileOptions: (keyof IGtfsZipFile)[];
 }
-declare const parseGTFS: (file: File | Blob, fileOptions?: ("stops" | "routes" | "trips" | "shapes")[]) => Promise<IGtfsResponse>;
-export declare type PARSE_GTFS = typeof parseGTFS;
-export default parseGTFS;
+declare class Parser {
+    worker: Worker;
+    promise: Promise<any>;
+    reject: (v?: any) => void;
+    resolve: (v?: any) => void;
+    constructor();
+    createWorker({ blob, fileOptions, }: IParameters): Promise<unknown>;
+}
+export default Parser;

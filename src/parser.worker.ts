@@ -17,7 +17,6 @@ ctx.onmessage = async (e: {
   };
 }) => {
   if (!e.data) return;
-  console.log(e.data, 'e.data');
 
   const {
     data: { blob, fileOptions },
@@ -65,8 +64,6 @@ ctx.onmessage = async (e: {
     }),
     {},
   );
-
-  console.log(res, 'res');
 
   // Extend shapes features
   if (res.hasOwnProperty('shapes')) {

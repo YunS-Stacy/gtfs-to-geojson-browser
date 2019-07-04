@@ -1,4 +1,4 @@
-import Parser from './parser.worker';
+import ParserWorker from './parser.worker';
 import getShapeFeatures from './utils/getShapeFeatures';
 import getStopFeatures from './utils/getStopFeatures';
 
@@ -64,39 +64,48 @@ export interface IGtfsZipFile {
   shapes: IGtfsShape[];
 }
 
+export interface IParameters {
+  blob: Blob;
+  fileOptions: (keyof IGtfsZipFile)[];
+}
+
 interface IGtfsResponse {
   shapes?: ReturnType<typeof getShapeFeatures>;
   stops?: ReturnType<typeof getStopFeatures>;
   routes?: IGtfsRoute[];
   trips?: IGtfsTripExtended[];
 }
-const parseGTFS = (
-  file: File | Blob,
-  fileOptions: (keyof IGtfsZipFile)[] = ['stops', 'routes', 'trips', 'shapes'],
-): Promise<IGtfsResponse> => {
-  console.time('parse');
-  if (!file) {
-    console.timeEnd('parse');
-    return null;
+
+class Parser {
+  worker: Worker;
+  promise: Promise<any>;
+  reject: (v?: any) => void;
+  resolve: (v?: any) => void;
+
+  constructor() {
+    this.worker = new ParserWorker();
+
+    this.worker.onmessage = (e: { data: IGtfsResponse[] }) => {
+      // parsepapa will also publish message event
+      if (Array.isArray(e.data) && e.data.length > 0) {
+        const [parsed] = e.data;
+        this.worker.terminate();
+        return this.resolve(parsed);
+      }
+    };
   }
-  // Use worker, not to block UI
-  const worker: Worker = new (Parser as any)();
 
-  worker.postMessage({
-    fileOptions,
-    blob: file,
-  });
-  worker.onmessage = async (e: { data: IGtfsResponse[] }) => {
-    // parsepapa will also publish message event
-    if (Array.isArray(e.data) && e.data.length > 0) {
-      const [parsed] = e.data;
-      console.timeEnd('parse');
-      worker.terminate();
-      return parsed;
+  // Activate worker, returning a promise
+  createWorker({
+    blob,
+    fileOptions = ['stops', 'routes', 'trips', 'shapes'],
+  }: IParameters) {
+    return new Promise((resolve, reject) => {
+      this.worker.postMessage({ blob, fileOptions });
+      this.resolve = resolve;
+      this.reject = reject;
+    });
+  }
+}
 
-    }
-  };
-};
-
-export type PARSE_GTFS = typeof parseGTFS;
-export default parseGTFS;
+export default Parser;
