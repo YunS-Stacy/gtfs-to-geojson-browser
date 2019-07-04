@@ -4,14 +4,15 @@
     "jsx": "preserve",
     "esModuleInterop": true,
     "declaration": true,
-    "lib": [
-      "es6",
-      "dom",
-      "webworker"
-    ],
+    "lib": ["es6", "dom", "webworker"],
     "outDir": "./lib",
+
     "moduleResolution": "node",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/typings/*"]
+    }
   },
   "exclude": ["node_modules", "dist", "lib"],
   "include": ["src", "webpack.config.js"]

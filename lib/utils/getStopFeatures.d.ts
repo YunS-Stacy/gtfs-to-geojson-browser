@@ -1,6 +1,4 @@
-import { Feature } from 'geojson';
-import { IGtfsStop } from '../parseGTFS';
-declare const _default: (datum: IGtfsStop[]) => Set<Feature<import("geojson").Geometry, {
-    [name: string]: any;
-}>>;
+import { Feature, Point } from 'geojson';
+import { IGtfsStop } from '..';
+declare const _default: (datum: IGtfsStop[]) => Feature<Point, IGtfsStop>[];
 export default _default;

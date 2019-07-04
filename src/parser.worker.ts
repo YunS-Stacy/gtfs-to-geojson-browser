@@ -1,44 +1,99 @@
 import Zip from 'jszip';
-import getRouteFeatures from './utils/getRouteFeatures';
+import getShapeFeatures from './utils/getShapeFeatures';
 import parseTxt from './utils/parseTxt';
 import getStopFeatures from './utils/getStopFeatures';
+import { IGtfsZipFile, IGtfsTrip } from '.';
+import { Feature } from 'geojson';
 
 const ctx: Worker = self as any;
-ctx.onmessage = async (e) => {
-  const { data: blob } = e;
+ctx.onmessage = async (e: {
+  data: {
+    blob: Blob;
+    fileOptions: (keyof IGtfsZipFile)[];
+  };
+}) => {
+  if (!e.data) return;
+  console.log(e.data, 'e.data');
+
+  const {
+    data: { blob, fileOptions },
+  } = e;
   // Load sample data
   const { files } = await Zip.loadAsync(blob);
   // Unzip
   const datum = await Promise.all(
-    Object.keys(files)
-      .filter((el) => /shape|stops/i.test(el))
-      .map(async (key) => {
-        if (/shape/i.test(key)) {
-          console.time('parse shape');
+    Object.keys(files).map(async name => {
+      const key = name.replace('.txt', '') as keyof IGtfsZipFile;
 
-          const text = await files[key].async('text');
-          const { data } = parseTxt(text);
-          // Generate shape
-          const res = getRouteFeatures(data);
-          console.timeEnd('parse shape');
+      if (!fileOptions.includes(key)) return null;
 
-          return Promise.resolve(res);
-        }
-        if (/stops/i.test(key)) {
-          console.time('parse stop');
+      const text = await files[name].async('text');
+      const { data } = parseTxt(text);
 
-          const text = await files[key].async('text');
-          const { data } = parseTxt(text);
+      if (/shapes$/i.test(key)) {
+        // Generate shape
+        const res = getShapeFeatures(data);
+        return { [key]: res };
+      }
 
-          // Generate shape
-          const res = getStopFeatures(data);
-          console.timeEnd('parse stop');
+      if (/stops$/i.test(key)) {
+        // Generate shape
+        const res = getStopFeatures(data);
 
-          return Promise.resolve(res);
-        }
-      }),
+        return { [key]: res };
+      }
+
+      return {
+        [key]: data,
+      };
+    }),
   );
-  ctx.postMessage(datum);
+
+  const res = datum.reduce(
+    (prev, curr) => ({
+      ...prev,
+      ...curr,
+    }),
+    {},
+  );
+
+  console.log(res, 'res');
+
+  // Extend shapes features
+  if (res.hasOwnProperty('shapes')) {
+    if (res.hasOwnProperty('trips') && res.trips.length > 0) {
+      const {
+        shapes,
+        trips,
+      }: {
+        shapes: ReturnType<typeof getShapeFeatures>;
+        trips: IGtfsTrip[];
+      } = res as any;
+      const newShapes = shapes.map(shape => {
+        const { properties } = shape;
+
+        const tripItemId = trips.findIndex(
+          ({ shape_id }) => shape_id === properties.shape_id,
+        );
+        if (tripItemId === -1) {
+          return shape;
+        }
+
+        const tripItem = trips[tripItemId];
+        const newProperties = {
+          ...properties,
+          ...tripItem,
+        };
+        return {
+          ...shape,
+          properties: newProperties,
+        } as typeof shape;
+      });
+      res.shapes = newShapes;
+    }
+  }
+
+  ctx.postMessage([res]);
 };
 
 // Trickery to fix TypeScript since this will be done by "worker-loader"
