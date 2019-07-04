@@ -12,10 +12,10 @@ module.exports = {
     libraryTarget: 'umd',
   },
 
-  mode: process.env.NODE_ENV || 'production',
+  mode: process.env.NODE_ENV || 'development',
 
   watchOptions: {
-    ignored: /node_modules|dist|\.js/g,
+    ignored: /node_modules|lib|\.js/g,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -27,7 +27,10 @@ module.exports = {
       {
         test: /\.worker\.ts$/,
         loader: 'worker-loader',
-        options: { publicPath: '/workers/' }
+        options: {
+          inline: true,
+          name: 'parser.worker.js'
+        }
       },
       {
         test: /\.tsx?$/,

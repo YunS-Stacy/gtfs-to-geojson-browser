@@ -1,9 +1,13 @@
 import { Feature } from 'geojson';
-import { IGtfsRoute } from '../parseGTFS';
-declare const _default: (datum: IGtfsRoute[]) => Set<Feature<import("geojson").Geometry, {
-    [name: string]: any;
-}>>;
+import { IGtfsShape } from '..';
+declare const _default: (datum: IGtfsShape[]) => {
+    routes: Set<Feature<import("geojson").Geometry, {
+        [name: string]: any;
+    }>>;
+};
 export default _default;
-export declare const groupByShapeId: (datum: IGtfsRoute[]) => Set<Feature<import("geojson").Geometry, {
-    [name: string]: any;
-}>>;
+export declare const groupByShapeId: (datum: IGtfsShape[]) => {
+    routes: Set<Feature<import("geojson").Geometry, {
+        [name: string]: any;
+    }>>;
+};

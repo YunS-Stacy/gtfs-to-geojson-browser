@@ -1,14 +1,12 @@
-import { LineString, Feature } from 'geojson';
-import { IGtfsRoute } from '../parseGTFS';
+import { LineString, Feature, Geometry } from 'geojson';
+import { IGtfsShape, IGtfsTripExtended } from '..';
 
-export default (datum: IGtfsRoute[]) => {
-  console.time('shape');
+export default (datum: IGtfsShape[]) => {
   const grouped = groupByShapeId(datum);
-  console.timeEnd('shape');
   return grouped;
 };
 
-export const groupByShapeId = (datum: IGtfsRoute[]) => {
+export const groupByShapeId = (datum: IGtfsShape[]) => {
   const res = datum.reduce(
     (prev, curr) => {
       if (prev.has(curr.shape_id)) {
@@ -22,9 +20,9 @@ export const groupByShapeId = (datum: IGtfsRoute[]) => {
 
       return prev;
     },
-    new Map() as Map<string, IGtfsRoute[]>,
+    new Map() as Map<IGtfsShape['shape_id'], IGtfsShape[]>,
   );
-  const routes: Set<Feature> = new Set();
+  const shapes: Feature<LineString, Partial<IGtfsTripExtended>>[] = [];
   res.forEach((value, key) => {
     const newValue = value
       .sort(({ shape_pt_sequence: a }, { shape_pt_sequence: b }) => a - b)
@@ -43,13 +41,13 @@ export const groupByShapeId = (datum: IGtfsRoute[]) => {
           coordinates: [],
         } as LineString,
       );
-    routes.add({
+    shapes.push({
       type: 'Feature',
       geometry: newValue,
       properties: {
-        RouteID: key,
+        shape_id: key,
       },
     });
   });
-  return routes;
+  return shapes;
 };
