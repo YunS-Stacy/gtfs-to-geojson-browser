@@ -1,0 +1,36 @@
+Arguments: 
+  D:\nodejs\node.exe D:\Yarn\bin\yarn.js init -
+
+PATH: 
+  D:\git\mingw64\bin;D:\git\usr\bin;C:\Users\shiyu\bin;D:\git\mingw64\bin;D:\git\usr\bin;C:\Users\shiyu\bin;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;D:\Python27\ArcGIS10.4;D:\HashiCorp\Vagrant\bin;C:\Program Files (x86)\GtkSharp\2.12\bin;D:\nodejs;D:\git\cmd;D:\Yarn\bin;C:\WINDOWS\System32\OpenSSH;D:\Microsoft VS Code\bin;C:\Users\shiyu\AppData\Local\Microsoft\WindowsApps;C:\Users\shiyu\AppData\Roaming\npm;C:\Program Files\heroku\bin;C:\Users\shiyu\AppData\Local\Yarn\bin;C:\Users\shiyu\AppData\Local\Microsoft\WindowsApps;D:\Programs\Fiddler
+
+Yarn version: 
+  1.16.0
+
+Node version: 
+  8.11.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (D:\Yarn\lib\cli.js:125850:13)
+      at emitNone (events.js:106:13)
+      at Interface.emit (events.js:208:7)
+      at Interface._ttyWrite (readline.js:775:16)
+      at ReadStream.onkeypress (readline.js:160:10)
+      at emitTwo (events.js:126:13)
+      at ReadStream.emit (events.js:214:7)
+      at emitKeys (internal/readline.js:420:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1011:36)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
