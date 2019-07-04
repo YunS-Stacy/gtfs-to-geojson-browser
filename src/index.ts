@@ -1,7 +1,6 @@
 import Parser from './parser.worker';
 import getFeatureCollectionFromFeatures from './utils/getFeatureCollectionFromFeatures';
-import getShapeFeatures from './utils/getShapeFeatures';
-import getStopFeatures from './utils/getStopFeatures';
+import { Feature, LineString, Point } from 'geojson';
 
 export interface IGtfsStop {
   stop_id: string;
@@ -66,12 +65,11 @@ export interface IGtfsZipFile {
 }
 
 interface IGtfsResponse {
-  shapes?: ReturnType<typeof getShapeFeatures>;
-  stops?: ReturnType<typeof getStopFeatures>;
+  shapes?: Feature<LineString, Partial<IGtfsTripExtended>>[];
+  stops?: Feature<Point, IGtfsStop>[];
   routes?: IGtfsRoute[];
   trips?: IGtfsTripExtended[];
 }
-
 const parseGTFS = async (
   file: File | Blob,
   fileOptions: (keyof IGtfsZipFile)[] = ['stops', 'routes', 'trips', 'shapes'],
@@ -97,7 +95,9 @@ const parseGTFS = async (
         (accum: IGtfsResponse, key: keyof IGtfsResponse) => ({
           ...accum,
           [key]: /shape|stop/i.test(key)
-            ? getFeatureCollectionFromFeatures(parsed[key as 'shapes' | 'stops'])
+            ? getFeatureCollectionFromFeatures(
+                parsed[key as 'shapes' | 'stops'],
+              )
             : parsed[key],
         }),
         {},

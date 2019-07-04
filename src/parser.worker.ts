@@ -2,7 +2,14 @@ import Zip from 'jszip';
 import getShapeFeatures from './utils/getShapeFeatures';
 import parseTxt from './utils/parseTxt';
 import getStopFeatures from './utils/getStopFeatures';
-import { IGtfsZipFile, IGtfsTrip, IGtfsRoute, IGtfsTripExtended } from '.';
+import { Feature, Point, LineString } from 'geojson';
+import {
+  IGtfsZipFile,
+  IGtfsTrip,
+  IGtfsRoute,
+  IGtfsTripExtended,
+  IGtfsStop,
+} from '.';
 
 const ctx: Worker = self as any;
 ctx.onmessage = async (e: {
@@ -43,27 +50,22 @@ ctx.onmessage = async (e: {
       }
 
       return {
-        [key]: data
+        [key]: data,
       };
     }),
   );
 
   const res: {
-      shapes?: ReturnType<typeof getShapeFeatures>;
-      stops?: ReturnType<typeof getStopFeatures>;
-      routes?: IGtfsRoute[];
-      trips?: IGtfsTripExtended[];
-    } = datum.reduce(
+    shapes?: Feature<LineString, Partial<IGtfsTripExtended>>[];
+    stops?: Feature<Point, IGtfsStop>[];
+    routes?: IGtfsRoute[];
+    trips?: IGtfsTripExtended[];
+  } = datum.reduce(
     (prev, curr) => ({
       ...prev,
       ...curr,
     }),
-    {} as {
-      shapes?: ReturnType<typeof getShapeFeatures>;
-      stops?: ReturnType<typeof getStopFeatures>;
-      routes?: IGtfsRoute[];
-      trips?: IGtfsTripExtended[];
-    },
+    {},
   );
 
   console.log(res, 'res');
