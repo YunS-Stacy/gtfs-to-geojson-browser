@@ -1,3 +1,5 @@
+import getShapeFeatures from './utils/getShapeFeatures';
+import getStopFeatures from './utils/getStopFeatures';
 export interface IGtfsStop {
     stop_id: string;
     stop_code?: string;
@@ -45,6 +47,18 @@ export interface IGtfsShape {
     shape_pt_sequence: number;
     shape_dist_traveled?: number;
 }
+export interface IGtfsStopTimes {
+    trip_id: IGtfsTrip['trip_id'];
+    arrival_time?: string;
+    departure_time?: string;
+    stop_id: IGtfsStop['stop_id'];
+    stop_sequence: number;
+    stop_headsign?: string;
+    pickup_type?: 0 | 1 | 2 | 3 | undefined | null;
+    drop_off_type?: 0 | 1 | 2 | 3 | undefined | null;
+    shape_dist_traveled?: number;
+    timepoint?: 0 | 1 | undefined | null;
+}
 export interface IGtfsTripExtended extends IGtfsTrip {
     shape_id: IGtfsShape['shape_id'];
 }
@@ -53,16 +67,23 @@ export interface IGtfsZipFile {
     routes: IGtfsRoute[];
     trips: IGtfsTrip[];
     shapes: IGtfsShape[];
+    stop_times: IGtfsStopTimes[];
 }
 export interface IParameters {
     blob: Blob;
     fileOptions: (keyof IGtfsZipFile)[];
 }
+interface IGtfsResponse {
+    shapes?: ReturnType<typeof getShapeFeatures>;
+    stops?: ReturnType<typeof getStopFeatures>;
+    routes?: IGtfsRoute[];
+    trips?: IGtfsTripExtended[];
+}
 declare class Parser {
     worker: Worker;
     promise: Promise<any>;
     reject: <T>(v?: T) => void;
-    resolve: <T>(v: T) => void;
+    resolve: (v: IGtfsResponse) => void;
     constructor();
     createWorker({ blob, fileOptions, }: IParameters): Promise<unknown>;
 }

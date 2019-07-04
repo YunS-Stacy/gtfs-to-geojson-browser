@@ -53,6 +53,18 @@ export interface IGtfsShape {
   shape_dist_traveled?: number;
 }
 
+export interface IGtfsStopTimes {
+  trip_id: IGtfsTrip['trip_id'];
+  arrival_time?: string;
+  departure_time?: string;
+  stop_id: IGtfsStop['stop_id'];
+  stop_sequence: number;
+  stop_headsign?: string;
+  pickup_type?: 0 | 1 | 2 | 3 | undefined | null;
+  drop_off_type?: 0 | 1 | 2 | 3 | undefined | null;
+  shape_dist_traveled?: number;
+  timepoint?: 0 | 1 | undefined | null;
+}
 export interface IGtfsTripExtended extends IGtfsTrip {
   shape_id: IGtfsShape['shape_id'];
 }
@@ -62,6 +74,7 @@ export interface IGtfsZipFile {
   routes: IGtfsRoute[];
   trips: IGtfsTrip[];
   shapes: IGtfsShape[];
+  stop_times: IGtfsStopTimes[];
 }
 
 export interface IParameters {
@@ -98,7 +111,7 @@ class Parser {
   // Activate worker, returning a promise
   createWorker({
     blob,
-    fileOptions = ['stops', 'routes', 'trips', 'shapes'],
+    fileOptions = ['stops', 'trips', 'shapes', 'stop_times'],
   }: IParameters) {
     return new Promise((resolve, reject) => {
       this.worker.postMessage({ blob, fileOptions });

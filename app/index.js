@@ -16,6 +16,7 @@ import Parser from '../lib/index';
   inputEl.accept =
     '.zip,zip,application/zip,application/x-zip,application/x-zip-compressed';
   inputEl.addEventListener('change', ev => {
+    resEl.innerHTML = 'Parsing...'
     const files = inputEl.files;
     const file = files[0];
 
