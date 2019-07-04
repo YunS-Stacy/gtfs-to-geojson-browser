@@ -80,7 +80,7 @@ class Parser {
   worker: Worker;
   promise: Promise<any>;
   reject: <T>(v?: T) => void;
-  resolve: <T>(v: T) => void;
+  resolve: (v: IGtfsResponse) => void;
 
   constructor() {
     this.worker = new ParserWorker();

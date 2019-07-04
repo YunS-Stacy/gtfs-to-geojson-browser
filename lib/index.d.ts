@@ -61,8 +61,8 @@ export interface IParameters {
 declare class Parser {
     worker: Worker;
     promise: Promise<any>;
-    reject: (v?: any) => void;
-    resolve: (v?: any) => void;
+    reject: <T>(v?: T) => void;
+    resolve: <T>(v: T) => void;
     constructor();
     createWorker({ blob, fileOptions, }: IParameters): Promise<unknown>;
 }
