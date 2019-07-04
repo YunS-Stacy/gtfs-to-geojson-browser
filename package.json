@@ -5,7 +5,7 @@
     "gtfs",
     "geojson"
   ],
-  "version": "2.1.1",
+  "version": "3.0.0",
   "author": "Yun Shi <shiyun_stacy@yahoo.com>",
   "license": "MIT",
   "main": "lib/index.js",
