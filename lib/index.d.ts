@@ -71,7 +71,7 @@ export interface IGtfsZipFile {
 }
 export interface IParameters {
     blob: Blob;
-    fileOptions: (keyof IGtfsZipFile)[];
+    fileOptions?: (keyof IGtfsZipFile)[];
 }
 interface IGtfsResponse {
     shapes?: ReturnType<typeof getShapeFeatures>;
