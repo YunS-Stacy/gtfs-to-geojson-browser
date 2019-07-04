@@ -3,14 +3,17 @@
     "module": "commonjs",
     "jsx": "preserve",
     "esModuleInterop": true,
-    "sourceMap": true,
-    "allowJs": true,
-    "lib": [
-      "es6",
-      "dom",
-    ],
-    "moduleResolution": "node"
+    "declaration": true,
+    "lib": ["es6", "dom", "webworker"],
+    "outDir": "./lib",
+
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/typings/*"]
+    }
   },
-  "exclude": ["node_modules", "dist"],
-  "include": ["src"]
+  "exclude": ["node_modules", "dist", "lib"],
+  "include": ["src", "webpack.config.js"]
 }
