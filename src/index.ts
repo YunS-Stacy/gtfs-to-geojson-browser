@@ -53,7 +53,7 @@ export interface IGtfsShape {
   shape_dist_traveled?: number;
 }
 
-export interface IGtfsStopTimes {
+export interface IGtfsStopTime {
   trip_id: IGtfsTrip['trip_id'];
   arrival_time?: string;
   departure_time?: string;
@@ -74,7 +74,7 @@ export interface IGtfsZipFile {
   routes: IGtfsRoute[];
   trips: IGtfsTrip[];
   shapes: IGtfsShape[];
-  stop_times: IGtfsStopTimes[];
+  stop_times: IGtfsStopTime[];
 }
 
 export interface IParameters {
@@ -87,13 +87,13 @@ interface IGtfsResponse {
   stops?: ReturnType<typeof getStopFeatures>;
   routes?: IGtfsRoute[];
   trips?: IGtfsTripExtended[];
+  stop_times?: IGtfsStopTime[];
 }
 
 class Parser {
   worker: Worker;
-  promise: Promise<any>;
-  reject: <T>(v?: T) => void;
   resolve: (v: IGtfsResponse) => void;
+  reject: <T>(v?: T) => void;
 
   constructor() {
     this.worker = new ParserWorker();
@@ -113,11 +113,13 @@ class Parser {
     blob,
     fileOptions = ['stops', 'trips', 'shapes', 'stop_times'],
   }: IParameters) {
-    return new Promise((resolve, reject) => {
-      this.worker.postMessage({ blob, fileOptions });
-      this.resolve = resolve;
-      this.reject = reject;
-    });
+    return new Promise(
+      (resolve: (v: IGtfsResponse) => void, reject: <T>(v?: T) => void) => {
+        this.worker.postMessage({ blob, fileOptions });
+        this.resolve = resolve;
+        this.reject = reject;
+      },
+    );
   }
 }
 

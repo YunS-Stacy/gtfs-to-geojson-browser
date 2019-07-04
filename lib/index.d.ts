@@ -47,7 +47,7 @@ export interface IGtfsShape {
     shape_pt_sequence: number;
     shape_dist_traveled?: number;
 }
-export interface IGtfsStopTimes {
+export interface IGtfsStopTime {
     trip_id: IGtfsTrip['trip_id'];
     arrival_time?: string;
     departure_time?: string;
@@ -67,7 +67,7 @@ export interface IGtfsZipFile {
     routes: IGtfsRoute[];
     trips: IGtfsTrip[];
     shapes: IGtfsShape[];
-    stop_times: IGtfsStopTimes[];
+    stop_times: IGtfsStopTime[];
 }
 export interface IParameters {
     blob: Blob;
@@ -78,13 +78,13 @@ interface IGtfsResponse {
     stops?: ReturnType<typeof getStopFeatures>;
     routes?: IGtfsRoute[];
     trips?: IGtfsTripExtended[];
+    stop_times?: IGtfsStopTime[];
 }
 declare class Parser {
     worker: Worker;
-    promise: Promise<any>;
-    reject: <T>(v?: T) => void;
     resolve: (v: IGtfsResponse) => void;
+    reject: <T>(v?: T) => void;
     constructor();
-    createWorker({ blob, fileOptions, }: IParameters): Promise<unknown>;
+    createWorker({ blob, fileOptions, }: IParameters): Promise<IGtfsResponse>;
 }
 export default Parser;
