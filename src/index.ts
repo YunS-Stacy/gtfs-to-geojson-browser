@@ -70,7 +70,7 @@ interface IGtfsResponse {
   routes?: IGtfsRoute[];
   trips?: IGtfsTripExtended[];
 }
-const parseGTFS = async (
+const parseGTFS = (
   file: File | Blob,
   fileOptions: (keyof IGtfsZipFile)[] = ['stops', 'routes', 'trips', 'shapes'],
 ): Promise<IGtfsResponse> => {
@@ -91,7 +91,9 @@ const parseGTFS = async (
     if (Array.isArray(e.data) && e.data.length > 0) {
       const [parsed] = e.data;
       console.timeEnd('parse');
+      worker.terminate();
       return parsed;
+
     }
   };
 };
