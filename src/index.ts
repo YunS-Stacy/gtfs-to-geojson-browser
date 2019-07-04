@@ -1,5 +1,4 @@
 import Parser from './parser.worker';
-import getFeatureCollectionFromFeatures from './utils/getFeatureCollectionFromFeatures';
 import getShapeFeatures from './utils/getShapeFeatures';
 import getStopFeatures from './utils/getStopFeatures';
 
@@ -91,20 +90,8 @@ const parseGTFS = async (
     // parsepapa will also publish message event
     if (Array.isArray(e.data) && e.data.length > 0) {
       const [parsed] = e.data;
-
-      const res: IGtfsResponse = Object.keys(parsed).reduce(
-        (accum: IGtfsResponse, key: keyof IGtfsResponse) => ({
-          ...accum,
-          [key]: /shape|stop/i.test(key)
-            ? getFeatureCollectionFromFeatures(
-                parsed[key as 'shapes' | 'stops'],
-              )
-            : parsed[key],
-        }),
-        {},
-      );
       console.timeEnd('parse');
-      return res;
+      return parsed;
     }
   };
 };
