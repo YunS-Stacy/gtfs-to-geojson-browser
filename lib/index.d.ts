@@ -1,5 +1,4 @@
-import getShapeFeatures from './utils/getShapeFeatures';
-import getStopFeatures from './utils/getStopFeatures';
+import { Feature, LineString, Point } from 'geojson';
 export interface IGtfsStop {
     stop_id: string;
     stop_code?: string;
@@ -57,8 +56,8 @@ export interface IGtfsZipFile {
     shapes: IGtfsShape[];
 }
 interface IGtfsResponse {
-    shapes?: ReturnType<typeof getShapeFeatures>;
-    stops?: ReturnType<typeof getStopFeatures>;
+    shapes?: Feature<LineString, Partial<IGtfsTripExtended>>[];
+    stops?: Feature<Point, IGtfsStop>[];
     routes?: IGtfsRoute[];
     trips?: IGtfsTripExtended[];
 }

@@ -12,7 +12,8 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "start": "parcel index.html --open"
+    "start": "parcel index.html --open",
+    "prepublish": "yarn build"
   },
   "dependencies": {
     "jszip": "3.2.1",
