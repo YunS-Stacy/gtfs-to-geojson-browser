@@ -1,6 +1,7 @@
 import Parser from './parser.worker';
 import getFeatureCollectionFromFeatures from './utils/getFeatureCollectionFromFeatures';
-import { Feature, LineString, Point } from 'geojson';
+import getShapeFeatures from './utils/getShapeFeatures';
+import getStopFeatures from './utils/getStopFeatures';
 
 export interface IGtfsStop {
   stop_id: string;
@@ -65,8 +66,8 @@ export interface IGtfsZipFile {
 }
 
 interface IGtfsResponse {
-  shapes?: Feature<LineString, Partial<IGtfsTripExtended>>[];
-  stops?: Feature<Point, IGtfsStop>[];
+  shapes?: ReturnType<typeof getShapeFeatures>;
+  stops?: ReturnType<typeof getStopFeatures>;
   routes?: IGtfsRoute[];
   trips?: IGtfsTripExtended[];
 }
