@@ -13,9 +13,10 @@
     "build": "webpack",
     "build:watch": "webpack --watch",
     "start": "parcel index.html --open",
-    "prepublish": "yarn build"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
+    "@types/geojson": "^7946.0.7",
     "jszip": "3.2.1",
     "papaparse": "5.0.0"
   },
@@ -27,7 +28,6 @@
     "url": "https://github.com/YunS-Stacy/gtfs-to-geojson-browser/issues"
   },
   "devDependencies": {
-    "@types/geojson": "^7946.0.7",
     "@types/jszip": "3.1.6",
     "@types/papaparse": "4.5.11",
     "awesome-typescript-loader": "^5.2.1",
